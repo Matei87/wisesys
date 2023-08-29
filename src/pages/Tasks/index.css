@@ -1,0 +1,33 @@
+table {
+  border: 2px solid forestgreen;
+  width: 800px;
+  height: 200px;
+}
+
+th {
+  border-bottom: 1px solid #242424;
+}
+
+td {
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+}
+.edit {
+  width: 3rem;
+  border: 1px solid #242424;
+  color: aliceblue;
+  font-size: 1rem;
+  background-color: #242424;
+}
+
+.delete {
+  width: 4rem;
+  border: 1px solid #242424;
+  color: aliceblue;
+  font-size: 1rem;
+  background-color: #242424;
+}

@@ -1,0 +1,13 @@
+footer {
+  height: 6rem;
+  background: #242424;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  color: aliceblue;
+  font-weight: 600;
+}
+footer p {
+  margin: 0;
+  color: crimson;
+}
