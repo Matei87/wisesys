@@ -1,43 +1,30 @@
-import { FC, useContext, useState } from 'react';
+import { FC, FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './index.css';
 import { AppContext } from '../../state';
 
-const LoginPage: FC = () => {
+const Login: FC = () => {
   const navigate = useNavigate();
-  const [fName, setFName] = useState<string | ''>('');
-  const [LName, setLName] = useState<string | ''>('');
-  const [emailAddress, setEmailAddress] = useState<string | ''>('');
-  const { email, firstName, lastName, setFirstName, setLastName, setEmail } =
-    useContext(AppContext);
+  const [error, setError] = useState<string>('');
+  const [emailAddress, setEmailAddress] = useState<string>('');
+  const { email, setIsUserLoggedIn } = useContext(AppContext);
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
-    fName && setFirstName(fName);
-    LName && setLastName(LName);
-    emailAddress && setEmail(emailAddress);
-    //navigate('/tasks');
+    if (email !== emailAddress) {
+      setError('Email not found !');
+    } else {
+      setError('');
+      setIsUserLoggedIn(true);
+      navigate('/tasks');
+    }
   };
-  console.log(firstName, lastName, email);
+  console.log(email);
 
   return (
     <div className='login'>
       <h2>Login</h2>
       <form onSubmit={handleOnSubmit}>
-        <input
-          type='text'
-          name='fName'
-          placeholder='First Name'
-          onChange={(e) => setFName(e.target.value)}
-          required
-        />
-        <input
-          type='text'
-          name='LName'
-          placeholder='Last Name'
-          onChange={(e) => setLName(e.target.value)}
-          required
-        />
         <input
           type='email'
           name='emailAddress'
@@ -45,13 +32,14 @@ const LoginPage: FC = () => {
           onChange={(e) => setEmailAddress(e.target.value)}
           required
         />
+        {!!error.length && <pre style={{ color: 'red' }}>{error}</pre>}
         <button className='submit' type='submit'>
           Submit
         </button>
       </form>
-      {firstName} {lastName} {email}
+      {email}
     </div>
   );
 };
 
-export default LoginPage;
+export default Login;

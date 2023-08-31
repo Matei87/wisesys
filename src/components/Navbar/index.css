@@ -8,6 +8,7 @@ nav {
 }
 
 nav a,
+nav li,
 .navList a {
   color: aliceblue;
   font-weight: 600;
@@ -17,5 +18,5 @@ nav a,
   display: flex;
   align-items: center;
   justify-content: space-around;
-  width: 125px;
+  width: 250px;
 }

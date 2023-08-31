@@ -1,8 +1,11 @@
-import { FC } from 'react';
+import { FC, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import './index.css';
+import { AppContext } from '../../state';
 
 const Navbar: FC = () => {
+  const { email, isUserLoggedIn } = useContext(AppContext);
+
   return (
     <nav>
       <div>
@@ -10,12 +13,23 @@ const Navbar: FC = () => {
       </div>
 
       <ul className='navList'>
-        <li>
-          <Link to='/login'>Login</Link>
-        </li>
-        <li>
-          <Link to='/tasks'>Tasks</Link>
-        </li>
+        {isUserLoggedIn ? (
+          <li>{`Hi ${email}`}</li>
+        ) : (
+          <li>
+            <Link to='/register'>Register</Link>
+          </li>
+        )}
+        {!isUserLoggedIn && (
+          <li>
+            <Link to='/login'>Login</Link>
+          </li>
+        )}
+        {isUserLoggedIn && (
+          <li>
+            <Link to='/tasks'>Tasks</Link>
+          </li>
+        )}
       </ul>
     </nav>
   );

@@ -1,78 +1,155 @@
-import { FC, ReactNode, createContext, useState } from 'react';
+import { ReactNode, createContext, useEffect, useState } from 'react';
 import DATA from '../shared/data.json';
+import {
+  InitialContextMethodsProps,
+  InitialContextProps,
+  TaskProp,
+} from '../shared/types';
 
-export type DataProp = {
-  id: number;
-  title: string;
-  description: string;
-  date: string;
+const setLocalStorage = (key: string, value: InitialContextProps) => {
+  console.log('setlocalstorage ', key, value);
+  window.localStorage.setItem(key, JSON.stringify(value));
 };
 
-export type TaskProp = {
-  data: DataProp[];
+const getLocalStorage = (key: string, initialValue: InitialContextProps) => {
+  const value = window.localStorage.getItem(key);
+  return value ? JSON.parse(value) : initialValue;
 };
 
-type InitialContextProps = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  tasks: TaskProp;
+const initialState: InitialContextProps & InitialContextMethodsProps = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  isUserLoggedIn: false,
+  tasks: DATA,
+  setIsUserLoggedIn: (isUserLoggedIn: boolean) => ({
+    ...initialState,
+    isUserLoggedIn,
+  }),
+  setDetails: ({
+    fName,
+    lName,
+    emailAddress,
+  }: {
+    fName: string;
+    lName: string;
+    emailAddress: string;
+  }) => ({
+    ...initialState,
+    firstName: fName,
+    lastName: lName,
+    email: emailAddress,
+  }),
+  AddTask: (task: TaskProp) => ({
+    ...initialState,
+    tasks: [...initialState.tasks, task],
+  }),
+  EditTask: (task: TaskProp) => ({
+    ...initialState,
+    tasks: initialState.tasks.map((data) =>
+      data.id === task.id ? task : data
+    ),
+  }),
+  DeleteTask: (id: number) => ({
+    ...initialState,
+    tasks: initialState.tasks.filter((task) => task.id !== id),
+  }),
+  SortDateAsc: () => ({
+    ...initialState,
+    tasks: initialState.tasks.sort(
+      (taskA, taskB) => +new Date(taskA.date) - +new Date(taskB.date)
+    ),
+  }),
+  SortDateDesc: () => ({
+    ...initialState,
+    tasks: initialState.tasks.sort(
+      (taskA, taskB) => +new Date(taskB.date) - +new Date(taskA.date)
+    ),
+  }),
 };
 
-export const AppContext = createContext<InitialContextProps | null>(null);
+export const AppContext = createContext(initialState);
 
-export const AppProvider: FC<ReactNode> = (props) => {
-  const initialState: InitialContextProps = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    //tasks: { data: [] },
-    tasks: DATA,
-  };
-  const [tasks, setTasks] = useState<TaskProp>(initialState.tasks);
-  const [firstName, setFirstName] = useState<string | ''>(
-    initialState.firstName
+export const AppProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}): JSX.Element => {
+  const [initialStorageState, setInitialStorageState] = useState(() =>
+    getLocalStorage('initialState', initialState)
   );
-  const [lastName, setLastName] = useState<string | ''>(initialState.lastName);
-  const [email, setEmail] = useState<string | ''>(initialState.email);
 
-  const addNewTask = (task: DataProp) => {
-    const newTask: DataProp = {
-      id: DATA['data'].length + 1,
-      title: task.title,
-      description: task.description,
-      date: String(new Date()),
-    };
-    setTasks((prev) => ({ ...prev, newTask }));
-  };
-  const updateTask = (task) => {
-    // tasks.filter((task: DataProp) => {
-    //   if (task.id === id) {
-    //     task.data = new Date();
-    //     setTasks([...DataProp]);
-    //   }
-    // });
-  };
-  const sortDataTask = () => {
-    return tasks.data.sort((a, b) => new Date(b.date) - new Date(a.date));
-  };
+  useEffect(() => {
+    setLocalStorage('initialState', initialStorageState);
+  }, [initialStorageState]);
 
   return (
     <AppContext.Provider
       value={{
-        tasks,
-        addNewTask,
-        updateTask,
-        sortDataTask,
-        firstName,
-        lastName,
-        email,
-        setFirstName,
-        setLastName,
-        setEmail,
+        tasks: initialStorageState.tasks,
+        firstName: initialStorageState.firstName,
+        lastName: initialStorageState.lastName,
+        email: initialStorageState.email,
+        isUserLoggedIn: initialStorageState.isUserLoggedIn,
+        setIsUserLoggedIn: (isUserLoggedIn: boolean) => {
+          console.log('initialisuserloggedin ', isUserLoggedIn);
+          setInitialStorageState({ ...initialStorageState, isUserLoggedIn });
+        },
+        setDetails: ({
+          fName,
+          lName,
+          emailAddress,
+        }: {
+          fName: string;
+          lName: string;
+          emailAddress: string;
+        }) => {
+          console.log('initialemail ', fName, lName, emailAddress);
+          setInitialStorageState({
+            ...initialStorageState,
+            firstName: fName,
+            lastName: lName,
+            email: emailAddress,
+          });
+        },
+        AddTask: (task: TaskProp) =>
+          setInitialStorageState({
+            ...initialStorageState,
+            tasks: [...initialStorageState.tasks, task],
+          }),
+        EditTask: (task: TaskProp) =>
+          setInitialStorageState({
+            ...initialStorageState,
+            tasks: initialStorageState.tasks.map((data: TaskProp) =>
+              data.id === task.id ? task : data
+            ),
+          }),
+        DeleteTask: (id: number) =>
+          setInitialStorageState({
+            ...initialStorageState,
+            tasks: initialStorageState.tasks.filter(
+              (task: TaskProp) => task.id !== id
+            ),
+          }),
+        SortDateAsc: () =>
+          setInitialStorageState({
+            ...initialStorageState,
+            tasks: initialStorageState.tasks.sort(
+              (taskA: TaskProp, taskB: TaskProp) =>
+                +new Date(taskA.date) - +new Date(taskB.date)
+            ),
+          }),
+        SortDateDesc: () =>
+          setInitialStorageState({
+            ...initialStorageState,
+            tasks: initialStorageState.tasks.sort(
+              (taskA: TaskProp, taskB: TaskProp) =>
+                +new Date(taskB.date) - +new Date(taskA.date)
+            ),
+          }),
       }}
     >
-      {props.children}
+      {children}
     </AppContext.Provider>
   );
 };

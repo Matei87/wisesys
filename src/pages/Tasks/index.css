@@ -1,33 +1,55 @@
-table {
-  border: 2px solid forestgreen;
-  width: 800px;
-  height: 200px;
-}
+.tasks {
+  h2 {
+    text-align: center;
+  }
 
-th {
-  border-bottom: 1px solid #242424;
-}
+  table {
+    border: 2px solid forestgreen;
+    width: 1000px;
+    height: 200px;
+    margin: 2rem;
+  }
 
-td {
-  text-align: center;
-}
+  .searchTitle {
+    width: 18rem;
+    margin-left: 2rem;
+  }
 
-.buttons {
-  display: flex;
-  justify-content: space-around;
-}
-.edit {
-  width: 3rem;
-  border: 1px solid #242424;
-  color: aliceblue;
-  font-size: 1rem;
-  background-color: #242424;
-}
+  th {
+    border-bottom: 1px solid #242424;
+  }
 
-.delete {
-  width: 4rem;
-  border: 1px solid #242424;
-  color: aliceblue;
-  font-size: 1rem;
-  background-color: #242424;
+  td {
+    text-align: center;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: space-around;
+  }
+  .edit {
+    width: 3rem;
+    border: 1px solid #242424;
+    color: aliceblue;
+    font-size: 1rem;
+    background-color: #242424;
+  }
+
+  .delete {
+    width: 4rem;
+    border: 1px solid #242424;
+    color: aliceblue;
+    font-size: 1rem;
+    background-color: #242424;
+  }
+
+  form {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    button.submit {
+      width: 200px;
+    }
+  }
 }
