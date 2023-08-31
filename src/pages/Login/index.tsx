@@ -1,13 +1,19 @@
 import { FC, FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../../context/AppContext';
+import {
+  InitialContextMethodsProps,
+  InitialContextProps,
+} from '../../shared/types';
 import './index.css';
-import { AppContext } from '../../state';
 
-const Login: FC = () => {
+const Login: FC = (): JSX.Element => {
   const navigate = useNavigate();
   const [error, setError] = useState<string>('');
   const [emailAddress, setEmailAddress] = useState<string>('');
-  const { email, setIsUserLoggedIn } = useContext(AppContext);
+  const { email, setIsUserLoggedIn } = useContext<
+    InitialContextProps & InitialContextMethodsProps
+  >(AppContext);
 
   const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -19,7 +25,6 @@ const Login: FC = () => {
       navigate('/tasks');
     }
   };
-  console.log(email);
 
   return (
     <div className='login'>
@@ -27,8 +32,8 @@ const Login: FC = () => {
       <form onSubmit={handleOnSubmit}>
         <input
           type='email'
-          name='emailAddress'
           placeholder='Email'
+          value={emailAddress}
           onChange={(e) => setEmailAddress(e.target.value)}
           required
         />
@@ -37,7 +42,6 @@ const Login: FC = () => {
           Submit
         </button>
       </form>
-      {email}
     </div>
   );
 };

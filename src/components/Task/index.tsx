@@ -1,10 +1,21 @@
 import { FC, useContext, useState } from 'react';
-import { TaskProp } from '../../shared/types';
-import { AppContext } from '../../state';
+import {
+  InitialContextMethodsProps,
+  InitialContextProps,
+  TaskProp,
+} from '../../shared/types';
+import { AppContext } from '../../context/AppContext';
 import { formatedDate } from '../../shared/utilities';
 
-const Task: FC<TaskProp> = ({ id, title, description, date }: TaskProp) => {
-  const { EditTask, DeleteTask } = useContext(AppContext);
+const Task: FC<TaskProp> = ({
+  id,
+  title,
+  description,
+  date,
+}: TaskProp): JSX.Element => {
+  const { EditTask, DeleteTask } = useContext<
+    InitialContextProps & InitialContextMethodsProps
+  >(AppContext);
   const [editId, setEditId] = useState<number>(-1);
   const [editTitle, setEditTitle] = useState<string>(title);
   const [editDescription, setEditDescription] = useState<string>(description);
@@ -28,6 +39,7 @@ const Task: FC<TaskProp> = ({ id, title, description, date }: TaskProp) => {
               type='text'
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
+              className='editableInput'
             />
           </td>
           <td>
@@ -35,10 +47,11 @@ const Task: FC<TaskProp> = ({ id, title, description, date }: TaskProp) => {
               type='text'
               value={editDescription}
               onChange={(e) => setEditDescription(e.target.value)}
+              className='editableInput'
             />
           </td>
           <td>
-            <input type='text' value={date} readOnly />
+            <input type='text' value={date} className='readInput' readOnly />
           </td>
           <td>
             <button type='button' className='edit' onClick={handleUpdate}>

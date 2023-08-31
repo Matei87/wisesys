@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from 'react';
+
 export type TaskProp = {
   id: number;
   title: string;
@@ -10,11 +12,11 @@ export type InitialContextMethodsProps = {
   setDetails: ({
     fName,
     lName,
-    emailAddress,
+    email,
   }: {
     fName: string;
     lName: string;
-    emailAddress: string;
+    email: string;
   }) => void;
   AddTask: (task: TaskProp) => void;
   EditTask: (task: TaskProp) => void;
@@ -24,9 +26,17 @@ export type InitialContextMethodsProps = {
 };
 
 export type InitialContextProps = {
-  firstName: string;
-  lastName: string;
+  fName: string;
+  lName: string;
   email: string;
   isUserLoggedIn: boolean;
   tasks: TaskProp[];
+};
+
+export type SearchTitleProps = {
+  searchTitle: string;
+};
+
+export type SetSearchTitleProps = SearchTitleProps & {
+  setSearchTitle: Dispatch<SetStateAction<string>>;
 };

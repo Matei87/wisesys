@@ -1,10 +1,16 @@
 import { FC, useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AppContext } from '../../context/AppContext';
+import {
+  InitialContextMethodsProps,
+  InitialContextProps,
+} from '../../shared/types';
 import './index.css';
-import { AppContext } from '../../state';
 
-const Navbar: FC = () => {
-  const { email, isUserLoggedIn } = useContext(AppContext);
+const Navbar: FC = (): JSX.Element => {
+  const { email, isUserLoggedIn } = useContext<
+    InitialContextProps & InitialContextMethodsProps
+  >(AppContext);
 
   return (
     <nav>
@@ -14,7 +20,7 @@ const Navbar: FC = () => {
 
       <ul className='navList'>
         {isUserLoggedIn ? (
-          <li>{`Hi ${email}`}</li>
+          <li>{`Hi, ${email}`}</li>
         ) : (
           <li>
             <Link to='/register'>Register</Link>

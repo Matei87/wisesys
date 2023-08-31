@@ -1,44 +1,43 @@
 import { FC, FormEvent, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-//import './index.css';
-import { AppContext } from '../../state';
+import { AppContext } from '../../context/AppContext';
+import {
+  InitialContextMethodsProps,
+  InitialContextProps,
+} from '../../shared/types';
 
-const Register: FC = () => {
+const Register: FC = (): JSX.Element => {
   const navigate = useNavigate();
   const [fName, setFName] = useState<string>('');
   const [lName, setLName] = useState<string>('');
-  const [emailAddress, setEmailAddress] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const [error, setError] = useState<string>('');
-  const { email, firstName, lastName, setDetails } = useContext(AppContext);
+  const { setDetails } = useContext<
+    InitialContextProps & InitialContextMethodsProps
+  >(AppContext);
 
   const handleOnSubmit = (e: FormEvent) => {
     e.preventDefault();
     const regex = /\S+@\S+\.\S+/;
-    if (!regex.test(emailAddress)) {
+    if (!regex.test(email)) {
       setError('Please enter a valid email address!');
     } else {
-      console.log('inside handle ', fName, lName, emailAddress);
-
       setError('');
-      setDetails({ fName, lName, emailAddress });
-
+      setDetails({ fName, lName, email });
       setFName('');
       setLName('');
-      setEmailAddress('');
+      setEmail('');
       navigate('/login');
     }
   };
-  console.log('Register ', firstName, lastName, email);
-  console.log('Register2 ', fName, lName, emailAddress);
 
   return (
-    <div className='login'>
+    <div className='register'>
       <h2>Register</h2>
       <form onSubmit={handleOnSubmit}>
         <input
           type='text'
           value={fName}
-          name='fName'
           placeholder='First Name'
           onChange={(e) => setFName(e.target.value)}
           required
@@ -46,17 +45,15 @@ const Register: FC = () => {
         <input
           type='text'
           value={lName}
-          name='lName'
           placeholder='Last Name'
           onChange={(e) => setLName(e.target.value)}
           required
         />
         <input
           type='email'
-          value={emailAddress}
-          name='emailAddress'
+          value={email}
           placeholder='Email'
-          onChange={(e) => setEmailAddress(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
           required
         />
         {!!error.length && <pre style={{ color: 'red' }}>{error}</pre>}
@@ -64,7 +61,6 @@ const Register: FC = () => {
           Submit
         </button>
       </form>
-      {firstName} {lastName} {email}
     </div>
   );
 };
