@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import AddTask from '../../components/AddTask';
 import SearchTask from '../../components/SearchTask';
 import Table from '../../components/Table';
+import './index.css';
 
 const Tasks: FC = (): JSX.Element => {
   const [searchTitle, setSearchTitle] = useState<string>('');
