@@ -26,12 +26,12 @@ const Table: FC<SearchTitleProps> = ({
     }
   };
 
-  const filteredArr = tasks.filter((task: TaskProp) => {
+  const filteredArr: TaskProp[] = tasks.filter((task: TaskProp) => {
     const regex = new RegExp(`${searchTitle}`, 'gi');
     return task.title.match(regex);
   });
 
-  const tasksArray = searchTitle.length > 0 ? filteredArr : tasks;
+  const tasksArray: TaskProp[] = searchTitle.length > 0 ? filteredArr : tasks;
 
   return (
     <table>
