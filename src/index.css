@@ -9,12 +9,9 @@
 :root {
   font-family: 'Montserrat', sans-serif;
   line-height: 1.5;
-
   color-scheme: light dark;
   color: #242424;
-  /* background-color: #242424; */
   background-color: aliceblue;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -40,4 +37,8 @@ a {
 
 li {
   list-style-type: none;
+}
+
+button:hover {
+  cursor: pointer;
 }
